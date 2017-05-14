@@ -1,0 +1,13 @@
+﻿body
+{
+}
+
+a
+{
+    text-decoration: none;
+}
+
+.optional
+{
+    font-style: italic;
+}

@@ -1,0 +1,15 @@
+﻿body
+{
+}
+
+.parameter, .field, .event, .property
+{
+    display: block;
+    padding: 16px;
+}
+
+.parameter b, .field b, .event b, .property b
+{
+    position: relative;
+    left: -16px;
+}

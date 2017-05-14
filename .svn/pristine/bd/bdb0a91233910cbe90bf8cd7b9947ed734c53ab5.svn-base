@@ -1,0 +1,448 @@
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml.Linq;
+
+namespace VSDocParser
+{
+    public class JSItem
+    {
+        public string Name { get; set; }
+        public string Summary { get; set; }
+
+        public JSItem()
+        {
+        }
+    }
+
+    public class JSReturnType
+    {
+        public string Type { get; set; }
+        public string Summary { get; set; }
+    }
+
+    public class JSObject : JSFunction
+    {
+        public List<JSField> Fields { get; set; }
+        public List<JSFunction> Properties { get; set; }
+        public List<JSFunction> Functions { get; set; }
+        public List<JSField> Events { get; set; }
+
+        public JSObject()
+        {
+            Fields = new List<JSField>();
+            Parameters = new List<JSParameter>();
+            Properties = new List<JSFunction>();
+            Functions = new List<JSFunction>();
+            ReturnType = new JSReturnType();
+            Events = new List<JSField>();
+        }
+    }
+
+    public class JSFunction : JSItem
+    {
+        public bool IsStatic { get; set; }
+        public bool IsProperty { get; set; }
+        public List<JSParameter> Parameters { get; set; }
+        public JSReturnType ReturnType { get; set; }
+        public string Type { get; set; }
+
+        public JSFunction()
+        {
+            Parameters = new List<JSParameter>();
+            ReturnType = new JSReturnType();
+        }
+    }
+
+    public class JSParameter : JSItem
+    {
+        public string Type { get; set; }
+        public bool Optional { get; set; }
+        public string Default { get; set; }
+
+        public JSParameter()
+        {
+            Default = "undefined";
+        }
+    }
+
+    public class JSField : JSItem
+    {
+        public bool IsEvent { get; set; }
+        public string Type { get; set; }
+    }
+
+    public static class Parser
+    {
+        public static List<JSFunction> Functions = new List<JSFunction>();
+        public static List<JSObject> Objects = new List<JSObject>();
+        public static List<JSObject> StaticObjects = new List<JSObject>();
+        public static List<string> Errors = new List<string>();
+
+        public static void ParseFile(string fileName, string documentationPath)
+        {
+            string[] allLines = File.ReadAllLines(fileName);
+            string currentXML = "";
+            string previousLine = "";
+            bool readingComment = false;
+            if (Objects.Count == 0)
+            {
+                Objects.Add(new JSObject() { Name = "Object" });
+                Objects.Add(new JSObject() { Name = "Array" });
+                Objects.Add(new JSObject() { Name = "Boolean" });
+                Objects.Add(new JSObject() { Name = "String" });
+                Objects.Add(new JSObject() { Name = "Date" });
+                Objects.Add(new JSObject() { Name = "Number" });
+                Objects.Add(new JSObject() { Name = "Function" });
+            }
+            List<JSObject> appliesTo = new List<JSObject>();
+            string oName;
+            foreach (string s in allLines)
+            {
+                if ((s.Contains(".prototype.") && s.Contains("function")) ||
+                    (s.Contains(".prototype.") && s.Substring(s.IndexOf("=") + 1).Trim().Length == 0))
+                {
+                    oName = s.Substring(0, s.IndexOf("."));
+                    appliesTo.Add((from o in Objects where o.Name == oName select o).First());
+                }
+                if (!readingComment && s.Contains("///"))
+                {
+                    if (!readingComment)
+                    {
+                        currentXML = "<codesnippet>" + previousLine + "</codesnippet>";
+                        readingComment = true;
+                    }
+
+                    currentXML += s.Substring(s.IndexOf("///") + 3);
+                    readingComment = true;
+                }
+                else if (readingComment && s.Contains("///"))
+                {
+                    currentXML += s.Substring(s.IndexOf("///") + 3);
+                }
+                else
+                {
+                    if (readingComment)
+                    {
+                        Parser.ProduceDocumentation(currentXML, appliesTo);
+                        currentXML = "";
+                        readingComment = false;
+                        appliesTo.Clear();
+                    }
+                }
+
+                previousLine = s;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (JSFunction f in (from o in Objects where o.Properties.Count == 0 && o.Fields.Count == 0 && o.Functions.Count == 0 select o).ToList())
+            {
+                sb.AppendFormat("<html>\n<head>\n<title>{0}</title></head>", f.Name);
+                sb.AppendFormat("<body>");
+                sb.AppendFormat("<h1>{0} - Global Method</h1>", f.Name);
+                sb.AppendFormat("<h2>Summary</h2>");
+                sb.AppendFormat("<p>{0}</p>", f.Summary);
+                sb.Append("<h2>Syntax</h2>");
+                sb.AppendFormat("<span class='globalfunction'>{0}(", f.Name);
+                bool first = true;
+                foreach (var p in f.Parameters)
+                {
+                    if (!first)
+                    {
+                        sb.Append(", ");
+                    }
+                    sb.AppendFormat("<span class='{0}'><a href='../types/{1}.html'>{1}</a></span>", p.Optional ? "optional" : "", p.Type, p.Name);
+                    first = false;
+                }
+
+                sb.Append(")</span>");
+                sb.Append("<h2>Parameters</h2>");
+                foreach (var p in f.Parameters)
+                {
+                    sb.AppendFormat("<span class='parameter'><b>{0}</b><br /><p class='parameters'>Type: <a href='../types/{1}.html'>{1}</a><br />{2}<br />{3}</span>", p.Name, p.Type, p.Optional ? "Optional" : "Required", p.Summary);
+                }
+
+                sb.Append("<h2>Return Type</h2>");
+                sb.AppendFormat("<span class='return'>Type: <a href='../types/{0}.html'>{0}</a><br />{1}</span>", f.ReturnType.Type, f.ReturnType.Summary);
+                File.WriteAllText(documentationPath + @"\globals\" + f.Name.Replace("$", "dollarsign_").ToLower() + ".html", sb.ToString());
+                sb.Length = 0;
+                Objects.Remove((JSObject)f);
+            }
+
+            sb = new StringBuilder();
+            foreach (JSObject o in Objects)
+            {
+                sb.AppendFormat("<html>\n<head>\n<title>{0}</title>", o.Name);
+                sb.AppendFormat("<link href='/styles/docs.css' type='text/css' rel='Stylesheet' /></head>");
+                sb.AppendFormat("<body>");
+                sb.AppendFormat("<h1>{0} - Object Type</h1>", o.Name);
+                sb.AppendFormat("<h2>Summary</h2>");
+                sb.AppendFormat("<p>{0}</p>", o.Summary);
+                sb.Append("<h2>Constructor Syntax</h2>");
+                sb.AppendFormat("<span class='constructorfunction'>new {0}(", o.Name);
+                bool first = true;
+                foreach (var p in o.Parameters)
+                {
+                    if (!first)
+                    {
+                        sb.Append(", ");
+                    }
+                    sb.AppendFormat("<span class='{0}'><a href='../types/{1}.html'>{1}</a> {2}</span>", p.Optional ? "optional" : "", p.Type, p.Name);
+                    first = false;
+                }
+
+                sb.Append(")<br />");
+                if (o.Parameters.Count > 0)
+                {
+                    sb.Append("<h3>Parameters</h3>");
+
+                    foreach (var p in o.Parameters)
+                    {
+                        sb.AppendFormat("<span class='parameter'><b>{0}</b><br /> Type: <a href='../types/{1}.html'>{1}</a><br />{2}<br />Default Value: {3}<br />{4}</span>", p.Name, p.Type, p.Optional ? "Optional" : "Required", p.Default, p.Summary);
+                    }
+                }
+
+                if (o.Fields.Count > 0)
+                {
+                    sb.Append("</span><h1>Fields</h1>");
+                    foreach (var f in from z in o.Fields orderby o.Name select z)
+                    {
+                        sb.AppendFormat("<span class='field'><b>{0}</b> <br /> Type: <a href='../types/{1}.html'>{1}</a><br />{2}</span>", f.Name, f.Type, f.Summary);
+                    }
+                }
+
+                if (o.Properties.Count > 0)
+                {
+                    sb.Append("<h1>Property Methods</h1>");
+                    foreach (var p in from y in o.Properties orderby y.Name select y)
+                    {
+                        sb.AppendFormat("<span class='property'><b>{0}(", p.Name);
+                        first = true;
+                        foreach (var x in p.Parameters)
+                        {
+                            if (!first)
+                            {
+                                sb.Append(", ");
+                            }
+                            sb.AppendFormat("<span class='{0}'><a href='../types/{1}.html'>{1}</a> {2}</span>", x.Optional ? "optional" : "", x.Type, x.Name);
+                            first = false;
+                        }
+                        sb.AppendFormat(")</b><br />{0}<br/><h3>Parameters</h3>", p.Summary);
+                        foreach (var k in p.Parameters)
+                        {
+                            sb.AppendFormat("<span class='parameter'><b>{0}</b><br /> Type: <a href='../types/{1}.html'>{1}</a><br />{2}<br />Default Value: {3}<br />{4}</span>", k.Name, k.Type, k.Optional ? "Optional" : "Required", k.Default, k.Summary);
+                        }
+                        sb.AppendFormat("<br /> Type: <a href='../types/{1}.html'>{1}</a><br />{2}</span>", p.Name, p.ReturnType.Type, p.Summary);
+                    }
+                }
+
+                if (o.Functions.Count > 0)
+                {
+                    sb.Append("<h1>Methods</h1>");
+                    foreach (var f in from w in o.Functions orderby w.Name select w)
+                    {
+                        sb.AppendFormat("<span class='function'><b>{0}(", f.Name);
+                        first = true;
+                        foreach (var x in f.Parameters)
+                        {
+                            if (!first)
+                            {
+                                sb.Append(", ");
+                            }
+                            sb.AppendFormat("<span class='{0}'><a href='../types/{1}.html'>{1}</a> {2}</span>", x.Optional ? "optional" : "", x.Type, x.Name);
+                            first = false;
+                        }
+                        sb.AppendFormat(")</b><br /> {0}<br />Return Type: <a href='../types/{1}.html'>{1}</a><br />{2}</span>", f.Summary, f.ReturnType.Type, f.ReturnType.Summary);
+                    }
+                }
+
+                if (o.Events.Count > 0)
+                {
+                    sb.Append("<h1>Events</h1>");
+                    foreach (var e in from h in o.Events orderby h.Name select h)
+                    {
+                        sb.AppendFormat("<span class='event'><b>{0}</b><br /> Type: <a href='../types/{1}.html'>{1}</a><br />{2}</span>", e.Name, e.Type, e.Summary);
+                    }
+                }
+
+                File.WriteAllText(documentationPath + @"\types\" + o.Name.ToLower() + ".html", sb.ToString());
+                sb.Length = 0;
+            }
+        }
+
+        public static void ProduceDocumentation(string xmlParts, List<JSObject> appliesTo)
+        {
+            XElement el;
+            try
+            {
+                el = XElement.Parse("<root>" + xmlParts + "</root>");
+            }
+            catch
+            {
+                Errors.Add("Unable to parse out XML portion:\n" + xmlParts);
+                return;
+            }
+
+            string workingLine = "";
+            JSFunction item = null;
+            int index = 0;
+
+            foreach (XElement n in el.Elements())
+            {
+                string name = n.Name.LocalName.ToLower();
+
+                switch (name)
+                {
+                    case "codesnippet":
+                        workingLine = n.Value;
+                        if (workingLine.Contains("var"))
+                        {
+                            item = new JSObject();
+                            item.IsStatic = true;
+                            index = workingLine.IndexOf("var ") + 4;
+                            item.Name = workingLine.Substring(index, workingLine.IndexOf("=") - index).Trim();
+                        }
+                        else if (!workingLine.Contains("=") && workingLine.Contains("("))
+                        {
+                            workingLine = workingLine.Replace("function", "");
+                            item = new JSObject();
+                            item.Name = workingLine.Substring(0, workingLine.IndexOf("(")).Trim();
+                            item.IsStatic = false;
+                        }
+
+                        else
+                        {
+                            item = new JSFunction();
+                            item.Type = workingLine.Substring(0, workingLine.IndexOf("."));
+                            index = workingLine.LastIndexOf(".") + 1;
+                            item.Name = workingLine.Substring(index, workingLine.IndexOf("=") - index);
+                            if (!workingLine.Contains("prototype"))
+                            {
+                                item.IsStatic = true;
+                            }
+                            else
+                            {
+                            }
+                        }
+
+                        break;
+
+                    case "summary":
+                        if (n.Value.Contains("(Property Function)"))
+                        {
+                            item.IsProperty = true;
+                            item.Summary = n.Value.Substring(n.Value.IndexOf(")") + 1);
+                        }
+                        else
+                        {
+                            item.Summary = n.Value;
+                        }
+                        break;
+
+                    case "param":
+                        JSParameter newParameter = new JSParameter();
+
+                        foreach (XAttribute xa in n.Attributes())
+                        {
+                            switch (xa.Name.LocalName.ToLower())
+                            {
+                                case "name":
+                                    newParameter.Name = xa.Value;
+                                    break;
+
+                                case "type":
+                                    newParameter.Type = xa.Value;
+                                    break;
+
+                                case "optional":
+                                    newParameter.Optional = xa.Value == "true";
+                                    break;
+
+                                case "default":
+                                    newParameter.Default = xa.Value;
+                                    break;
+                            }
+                        }
+
+                        newParameter.Summary = n.Value;
+                        item.Parameters.Add(newParameter);
+                        break;
+
+                    case "field":
+                        JSField newField = new JSField();
+                        foreach (XAttribute xa in n.Attributes())
+                        {
+                            switch (xa.Name.LocalName.ToLower())
+                            {
+                                case "name":
+                                    newField.Name = xa.Value;
+                                    break;
+
+                                case "type":
+                                    newField.Type = xa.Value;
+                                    break;
+                            }
+                        }
+
+                        if (n.Value.Contains("(Event)"))
+                        {
+                            newField.IsEvent = true;
+                            newField.Summary = n.Value.Substring(n.Value.IndexOf(")") + 1);
+                            ((JSObject)item).Events.Add(newField);
+                        }
+                        else
+                        {
+                            newField.Summary = n.Value;
+                            ((JSObject)item).Fields.Add(newField);
+                        }
+                        break;
+
+                    case "returns":
+                        foreach (XAttribute xa in n.Attributes())
+                        {
+                            switch (xa.Name.LocalName.ToLower())
+                            {
+                                case "type":
+                                    item.ReturnType.Type = xa.Value;
+                                    break;
+                            }
+                        }
+                        item.ReturnType.Summary = n.Value;
+                        break;
+
+                    default:
+                        Parser.Errors.Add("Unrecognized XML node: " + name);
+                        break;
+                }
+            }
+
+            if (item is JSObject)
+            {
+                Parser.Objects.Add((JSObject)item);
+            }
+            else
+            {
+                if (item.IsProperty)
+                {
+                    foreach (var o in appliesTo)
+                    {
+                        o.Properties.Add(item);
+                    }
+                }
+                else if (!string.IsNullOrEmpty(item.Type))
+                {
+                    foreach (var o in appliesTo)
+                    {
+                        o.Functions.Add(item);
+                    }
+                }
+                else
+                {
+                    Parser.Functions.Add(item);
+                }
+            }
+        }
+    }
+}

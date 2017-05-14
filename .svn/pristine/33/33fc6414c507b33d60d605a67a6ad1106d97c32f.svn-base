@@ -1,0 +1,82 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="accordion.aspx.cs" Inherits="examples_accordion" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Accordion Example</title>
+    <link href="/styles/main.css" type="text/css" rel="Stylesheet" />
+    <style type="text/css">
+        *
+        {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        
+        .accordion
+        {
+            background: #004000;
+            border: 2px solid #002000;
+            width: 250px;
+        }
+        
+        .accordion .selected
+        {
+            background-color: #40c000;
+        }
+        
+        .accordion .header
+        {
+            color: #ffffff;
+            padding: 8px;
+        }
+        
+        .accordion .header:hover
+        {
+            background: #008000;
+        }
+        
+        .accordion .item
+        {
+            background: #ffffff;
+            padding: 8px;
+        }
+        
+        a
+        {
+            display: block;
+        }
+    </style>
+    <script type="text/javascript" src="/minscripts/NinJa.js"></script>
+    <script type="text/javascript" src="/minscripts/NinJaVisuals.js"></script>
+    <script type="text/javascript" src="/minscripts/NinJaControls.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div effect="foldv" class="accordion">
+        <div header="Top Rated">
+            <a>Shiny World</a>
+            <a>roppongi evolved ver D.</a>
+            <a>B4U</a>
+            <a>Gold Rush</a>
+            <a>Frozen Ray (for Extreme)</a>
+        </div>
+        <div header="Most Downloaded">
+            <a>Shiny World</a>
+            <a>B4U</a>
+            <a>roppongi evolved ver A.</a>
+            <a>Drop</a>
+            <a>Red Zone</a>
+        </div>
+        <div header="Most Recent">
+            <a>.59</a>
+            <a>Anti-Matter</a>
+            <a>Saber Wing</a>
+            <a>Horatio</a>
+            <a>Put 'Em Up</a>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

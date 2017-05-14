@@ -1,0 +1,354 @@
+﻿///<reference path="~/scripts/NinJa.js" />
+
+var NinJaVisuals = {
+    Version: "0.7.0"
+};
+
+var Speed = {
+    Slow: 1000,
+    Normal: 750,
+    Fast: 600,
+    Faster: 250,
+    Fastest: 10
+};
+
+var Smoothness = {
+    Normal: 20,
+    Smooth: 30,
+    Smoother: 40,
+    Smoothest: 50
+};
+
+var Alignment = {
+    Top: 0,
+    Bottom: 1,
+    Left: 2,
+    Right: 3,
+    Center: 4,
+    Middle: 5
+};
+
+var Side = {
+    Top: 0,
+    Bottom: 1,
+    Left: 2,
+    Right: 3
+};
+
+var Direction = {
+    Vertical: 0,
+    Horizontal: 1,
+    Diagonal: 2
+};
+
+var Effects = {
+    None: 0,
+    Fade: 1,
+    Slide: 2,
+    FoldVertical: 3,
+    FoldHorizontal: 4,
+    FoldBoth: 5
+};
+
+
+
+var Edge = {
+    North: 0,
+    NorthWest: 1,
+    West: 2,
+    SouthWest: 3,
+    South: 4,
+    SouthEast: 5,
+    East: 6,
+    NorthEast: 7
+};
+
+NinJaVisuals.TextHeight = function (text, fontFamily, fontSize) {
+    ///<summary>Calculates the height of the text given the font family and font size.</summary>
+    ///<param name="text" type="String">Text to check.</param>
+    ///<param name="fontFamily" type="String">&lt;Default: "default"&gt;Font family.</param>
+    ///<param name="fontSize" type="String">&ltDefault: "default"&gt;Font size in pts.</param>
+};
+
+NinJaVisuals.TextWidth = function (text, fontFamily, fontSize) {
+    ///<summary>Calculates the width of the text given the font family and font size.</summary>
+    ///<param name="text" type="String">Text to check.</param>
+    ///<param name="fontFamily" type="String">&lt;Default: "default"&gt;Font family.</param>
+    ///<param name="fontSize" type="String">&ltDefault: "default"&gt;Font size in pts.</param>
+};
+
+// Animations
+Anchor.prototype.Slide =
+Body.prototype.Slide =
+Button.prototype.Slide =
+Cell.prototype.Slide =
+CheckBox.prototype.Slide =
+DropDownList.prototype.Slide =
+Content.prototype.Slide =
+ContentButton.prototype.Slide =
+Div.prototype.Slide =
+Element.prototype.Slide =
+FileUpload.prototype.Slide =
+Header.prototype.Slide =
+ImageElement.prototype.Slide =
+Label.prototype.Slide =
+List.prototype.Slide =
+ListBox.prototype.Slide =
+ListItem.prototype.Slide =
+Password.prototype.Slide =
+RadioButton.prototype.Slide =
+Row.prototype.Slide =
+Span.prototype.Slide =
+Table.prototype.Slide =
+TableBody.prototype.Slide =
+TableFoot.prototype.Slide =
+TableHead.prototype.Slide =
+TextArea.prototype.Slide =
+TextBox.prototype.Slide = function (x, y, speed, smoothness, onFinish) {
+    ///<summary>Animates the element by moving it to the X and Y position.</summary>
+    ///<param name="x" type="Number">The x position to move the element to.</param>
+    ///<param name="y" type="Number">The y position to move the element to.</param>
+    ///<param name="speed" type="Speed/Number">&lt;Optional&gt;The number of milliseconds to complete the animation.</param>
+    ///<param name="smoothness" type="Smoothness/Number">&lt;Optional&gt;Number of frames to use for the animation.</param>
+    ///<param name="onFinish" type="Function/Delegate">&lt;Optional&gt;Function or delegate to execute after the animation is complete.</param>
+    return this;
+}
+
+Anchor.prototype.FadeIn =
+Body.prototype.FadeIn =
+Button.prototype.FadeIn =
+Cell.prototype.FadeIn =
+CheckBox.prototype.FadeIn =
+DropDownList.prototype.FadeIn =
+Content.prototype.FadeIn =
+ContentButton.prototype.FadeIn =
+Div.prototype.FadeIn =
+Element.prototype.FadeIn =
+FileUpload.prototype.FadeIn =
+Header.prototype.FadeIn =
+ImageElement.prototype.FadeIn =
+Label.prototype.FadeIn =
+List.prototype.FadeIn =
+ListBox.prototype.FadeIn =
+ListItem.prototype.FadeIn =
+Password.prototype.FadeIn =
+RadioButton.prototype.FadeIn =
+Row.prototype.FadeIn =
+Span.prototype.FadeIn =
+Table.prototype.FadeIn =
+TableBody.prototype.FadeIn =
+TableFoot.prototype.FadeIn =
+TableHead.prototype.FadeIn =
+TextArea.prototype.FadeIn =
+TextBox.prototype.FadeIn = function (speed, smoothness, onFinish) {
+    ///<summary>Fades the element into full opacity.</summary>
+    ///<param name="speed" type="Speed/Number">&lt;Optional&gt;The number of milliseconds to complete the animation.</param>
+    ///<param name="smoothness" type="Smoothness/Number">&lt;Optional&gt;Number of frames to use for the animation.</param>
+    ///<param name="onFinish" type="Function/Delegate">&lt;Optional&gt;Function or delegate to execute after the animation is complete.</param>
+    return true;
+}
+
+Anchor.prototype.FadeOut =
+Body.prototype.FadeOut =
+Button.prototype.FadeOut =
+Cell.prototype.FadeOut =
+CheckBox.prototype.FadeOut =
+DropDownList.prototype.FadeOut =
+Content.prototype.FadeOut =
+ContentButton.prototype.FadeOut =
+Div.prototype.FadeOut =
+Element.prototype.FadeOut =
+FileUpload.prototype.FadeOut =
+Header.prototype.FadeOut =
+ImageElement.prototype.FadeOut =
+Label.prototype.FadeOut =
+List.prototype.FadeOut =
+ListBox.prototype.FadeOut =
+ListItem.prototype.FadeOut =
+Password.prototype.FadeOut =
+RadioButton.prototype.FadeOut =
+Row.prototype.FadeOut =
+Span.prototype.FadeOut =
+Table.prototype.FadeOut =
+TableBody.prototype.FadeOut =
+TableFoot.prototype.FadeOut =
+TableHead.prototype.FadeOut =
+TextArea.prototype.FadeOut =
+TextBox.prototype.FadeOut = function (speed, smoothness, onFinish) {
+    ///<summary>Fades the element into full transparency.</summary>
+    ///<param name="speed" type="Speed/Number">&lt;Optional&gt;The number of milliseconds to complete the animation.</param>
+    ///<param name="smoothness" type="Smoothness/Number">&lt;Optional&gt;Number of frames to use for the animation.</param>
+    ///<param name="onFinish" type="Function/Delegate">&lt;Optional&gt;Function or delegate to execute after the animation is complete.</param>
+    return this;
+}
+
+Anchor.prototype.FadeTo =
+Body.prototype.FadeTo =
+Button.prototype.FadeTo =
+Cell.prototype.FadeTo =
+CheckBox.prototype.FadeTo =
+DropDownList.prototype.FadeTo =
+Content.prototype.FadeTo =
+ContentButton.prototype.FadeTo =
+Div.prototype.FadeTo =
+Element.prototype.FadeTo =
+FileUpload.prototype.FadeTo =
+Header.prototype.FadeTo =
+ImageElement.prototype.FadeTo =
+Label.prototype.FadeTo =
+List.prototype.FadeTo =
+ListBox.prototype.FadeTo =
+ListItem.prototype.FadeTo =
+Password.prototype.FadeTo =
+RadioButton.prototype.FadeTo =
+Row.prototype.FadeTo =
+Span.prototype.FadeTo =
+Table.prototype.FadeTo =
+TableBody.prototype.FadeTo =
+TableFoot.prototype.FadeTo =
+TableHead.prototype.FadeTo =
+TextArea.prototype.FadeTo =
+TextBox.prototype.FadeTo = function (opacity, speed, smoothness, onFinish) {
+    ///<summary>Fades the element to the specified opacity.</summary>
+    ///<param name="opacity" type="Number">The opacity level to fade the element to.</param>
+    ///<param name="speed" type="Speed/Number">&lt;Optional&gt;The number of milliseconds to complete the animation.</param>
+    ///<param name="smoothness" type="Smoothness/Number">&lt;Optional&gt;Number of frames to use for the animation.</param>
+    ///<param name="onFinish" type="Function/Delegate">&lt;Optional&gt;Function or delegate to execute after the animation is complete.</param>
+    return this;
+}
+
+Anchor.prototype.Unfold =
+Body.prototype.Unfold =
+Button.prototype.Unfold =
+Cell.prototype.Unfold =
+CheckBox.prototype.Unfold =
+DropDownList.prototype.Unfold =
+Content.prototype.Unfold =
+ContentButton.prototype.Unfold =
+Div.prototype.Unfold =
+Element.prototype.Unfold =
+FileUpload.prototype.Unfold =
+Header.prototype.Unfold =
+ImageElement.prototype.Unfold =
+Label.prototype.Unfold =
+List.prototype.Unfold =
+ListBox.prototype.Unfold =
+ListItem.prototype.Unfold =
+Password.prototype.Unfold =
+RadioButton.prototype.Unfold =
+Row.prototype.Unfold =
+Span.prototype.Unfold =
+Table.prototype.Unfold =
+TableBody.prototype.Unfold =
+TableFoot.prototype.Unfold =
+TableHead.prototype.Unfold =
+TextArea.prototype.Unfold =
+TextBox.prototype.Unfold = function (direction, speed, smoothness, onFinish) {
+    ///<summary>Resizess the element from nothing to full Columns..</summary>
+    ///<param name="direction" type="Direction">The direction to unfold the element</param>
+    ///<param name="speed" type="Speed/Number">&lt;Optional&gt;The number of milliseconds to complete the animation.</param>
+    ///<param name="smoothness" type="Smoothness/Number">&lt;Optional&gt;Number of frames to use for the animation.</param>
+    ///<param name="onFinish" type="Function/Delegate">&lt;Optional&gt;Function or delegate to execute after the animation is complete.</param>
+    return this;
+}
+Anchor.prototype.Fold =
+Body.prototype.Fold =
+Button.prototype.Fold =
+Cell.prototype.Fold =
+CheckBox.prototype.Fold =
+DropDownList.prototype.Fold =
+Content.prototype.Fold =
+ContentButton.prototype.Fold =
+Div.prototype.Fold =
+Element.prototype.Fold =
+FileUpload.prototype.Fold =
+Header.prototype.Fold =
+ImageElement.prototype.Fold =
+Label.prototype.Fold =
+List.prototype.Fold =
+ListBox.prototype.Fold =
+ListItem.prototype.Fold =
+Password.prototype.Fold =
+RadioButton.prototype.Fold =
+Row.prototype.Fold =
+Span.prototype.Fold =
+Table.prototype.Fold =
+TableBody.prototype.Fold =
+TableFoot.prototype.Fold =
+TableHead.prototype.Fold =
+TextArea.prototype.Fold =
+TextBox.prototype.Fold = function (direction, speed, smoothness, onFinish) {
+    ///<summary>Resizess the element from full Columns to nothing.</summary>
+    ///<param name="direction" type="Direction">The direction to fold the element</param>
+    ///<param name="speed" type="Speed/Number">&lt;Optional&gt;The number of milliseconds to complete the animation.</param>
+    ///<param name="smoothness" type="Smoothness/Number">&lt;Optional&gt;Number of frames to use for the animation.</param>
+    ///<param name="onFinish" type="Function/Delegate">&lt;Optional&gt;Function or delegate to execute after the animation is complete.</param>
+    return this;
+}
+
+
+function Bounds() {
+    this.Left = 0;
+    this.Right = 0;
+    this.Top = 0;
+    this.Bottom = 0;
+}
+
+Bounds.prototype.Within = function (x, y) {
+    ///<summary>Checks to see if the x and y position is within the bounds.</summary>
+    ///<param name="x" type="Number">The x position to check.</param>
+    ///<param name="y" type="Number">The y position to check.</param>
+    return true;
+};
+
+Bounds.prototype.OnEdge = function (x, y, edge, proximity) {
+    ///<summary>Checks to see if the position is on the edge of the bounds.</summary>
+    ///<param name="x" type="Number">The x point.</param>
+    ///<param name="y" type="Number">The y point.</param>
+    ///<param name="edge" type="Edge">The edge to test.</param>
+    ///<param name="proximity" type="Number">&lt;Optional&gt;Proximity to test the point against the edge.</param>
+};
+
+Anchor.prototype.GetBounds =
+Body.prototype.GetBounds =
+Button.prototype.GetBounds =
+Cell.prototype.GetBounds =
+CheckBox.prototype.GetBounds =
+DropDownList.prototype.GetBounds =
+Content.prototype.GetBounds =
+ContentButton.prototype.GetBounds =
+Div.prototype.GetBounds =
+Element.prototype.GetBounds =
+FileUpload.prototype.GetBounds =
+Header.prototype.GetBounds =
+ImageElement.prototype.GetBounds =
+Label.prototype.GetBounds =
+List.prototype.GetBounds =
+ListBox.prototype.GetBounds =
+ListItem.prototype.GetBounds =
+Password.prototype.GetBounds =
+RadioButton.prototype.GetBounds =
+Row.prototype.GetBounds =
+Span.prototype.GetBounds =
+Table.prototype.GetBounds =
+TableBody.prototype.GetBounds =
+TableFoot.prototype.GetBounds =
+TableHead.prototype.GetBounds =
+TextArea.prototype.GetBounds =
+TextBox.prototype.GetBounds = function () {
+    ///<summary>Returns a bounds object indicating the area that an element takes up.</summary>
+    return new Bounds();
+};
+
+Client.ElementClipped = function (element, side) {
+    ///<summary>Determines if the element is clipped by the window's viewing area.</summary>
+    ///<param name="element" type="Element">Element to check.</param>
+    ///<param name="side" type="Side">The side to check for clipping.</param>
+    return true;
+}
+
+Content.prototype.ElementClipped = function (element) {
+    ///<summary>Determines if the element is clipped by the viewport of the content.</summary>
+
+    return true;
+}

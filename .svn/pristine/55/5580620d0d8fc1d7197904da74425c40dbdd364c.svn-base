@@ -1,0 +1,114 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="dialog.aspx.cs" Inherits="examples_dialog" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Accordion Example</title>
+    <link href="/styles/main.css" type="text/css" rel="Stylesheet" />
+    <style type="text/css">
+        *
+        {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        
+        .dialog
+        {
+            border: 2px solid #c0c0c0;
+            background-color: #ffffff;
+            padding: 8px;
+            width: 500px;
+            height: 200px;
+        }
+        
+        button
+        {
+            background-color: #808080;
+            border: 2px solid #404040;
+            color: #ffffff;
+        }
+        
+        input
+        {
+            border: 1px solid #000000;
+            padding: 4px;
+        }
+        
+        .calendar
+        {
+            border: 2px solid #004000;
+            background-color: #408000;
+            color: #ffffff;
+            width: 250px;
+            height: 250px;
+        }
+        
+        td.selected
+        {
+            background-color: #ffc000 !important;
+        }
+        
+        .calendar td.pad
+        {
+            background-color: #c0c0c0;
+            color: #000000;
+        }
+        
+        .calendar td:hover
+        {
+            background-color: #90e000;
+        }
+        
+        .calendar td
+        {
+            background-color: #80c000;
+            cursor: pointer;
+        }
+        
+        .calendar a
+        {
+            color: #ffffff;
+            font-weight: bold;
+            text-decoration: none;
+
+        }
+    </style>
+    <script type="text/javascript" src="/scripts/NinJa.js"></script>
+    <script type="text/javascript" src="/scripts/NinJaVisuals.js"></script>
+    <script type="text/javascript" src="/scripts/NinJaControls.js"></script>
+    <script type="text/javascript">
+        Page.OnLoad.Add(function () {
+            $Dialog("birthdate").OnDialogClose.Add(function (e) {
+                e = $EventArgs(e);
+                if (e.Data == DialogResult.Ok) {
+                    if (DateTime.Now().Year() - $Calendar("my_cal").SelectedDate().Year() < 18) {
+                        alert("You're too young!");
+                        Page.Collapsed(true);
+                    }
+                    else {
+                        alert("Seems you're old enough!");
+                    }
+                }
+                else {
+                    alert("You can't access this site!");
+                    Page.Collapsed(true);
+                }
+            });
+            $Dialog("birthdate").Show();
+        });
+
+    </script>
+</head>
+<body>
+    <h1>Super Secret Site!</h1>
+    <p>The information on this page is super secret!</p>
+    <div class="dialog" id="birthdate">
+        <h1>Enter Your Birthdate</h1>
+        <input id="my_cal" type="text" effect="fade" pad="true" class="calendar" /><br />
+        <button onclick="Dialog.Hide(DialogResult.Ok)">Confirm</button>
+        <button onclick="Dialog.Hide(DialogResult.Cancel)">Cancel</button>
+    </div>
+</body>
+</html>

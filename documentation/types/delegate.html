@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Delegate - Object Type</title>
+<link href='/styles/docs.css' type='text/css' rel='Stylesheet' />
+</head>
+<body>
+<h1>Delegate - Object Type</h1>
+<h2>Summary</h2>
+<p>A specialized function that calls the provided function with the provided caller and with the provided parameters passed in.</p>
+<h2>Constructor</h2>
+<span class='constructor'>new Delegate(<span class=''><a href='../types/Function.html'>Function</a> func</span>, <span class=''><a href='../types/Object.html'>Object</a> caller</span>, <span class='optional'><a href='../types/Array.html'>Array</a> parameters</span>)</span>
+<p>A specialized function that calls the provided function with the provided caller and with the provided parameters passed in.</p>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>func</td><td><a href='../types/Function.html'>Function</a></td><td>yes</td><td>undefined</td><td>Function to execute.</td></tr>
+<tr><td>caller</td><td><a href='../types/Object.html'>Object</a></td><td>yes</td><td>undefined</td><td>The caller of the function, or what "this" will be when function is executed. This can be set to null if caller does not matter.</td></tr>
+<tr><td>parameters</td><td><a href='../types/Array.html'>Array</a></td><td>no</td><td>undefined</td><td>(Optional) An Array of objects to pass as parameters to the function.</td></tr>
+</table>
+<h1>Fields</h1>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>Function</td><td><a href='../types/Function.html'>Function</a></td><td>Function to execute.</td></tr>
+<tr><td>Caller</td><td><a href='../types/Object.html'>Object</a></td><td>Caller of the function.</td></tr>
+<tr><td>Parameters</td><td><a href='../types/Array.html'>Array</a></td><td>List of parameters to pass to the function.</td></tr>
+<tr><td>Enabled</td><td><a href='../types/Boolean.html'>Boolean</a></td><td>If set to false, the delegate will not execute during events.</td></tr>
+<tr><td>Type</td><td><a href='../types/String.html'>String</a></td><td>Returns Type.Delegate.</td></tr>
+</table>

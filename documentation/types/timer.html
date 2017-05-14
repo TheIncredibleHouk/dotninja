@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Timer - Object Type</title>
+<link href='/styles/docs.css' type='text/css' rel='Stylesheet' />
+</head>
+<body>
+<h1>Timer - Object Type</h1>
+<h2>Summary</h2>
+<p>Creates a timer that fires a trigger after each period.</p>
+<h2>Constructor</h2>
+<span class='constructor'>new Timer(<span class=''><a href='../types/Number/TimeSpan.html'>Number/TimeSpan</a> millisecondsTimeSpan</span>, <span class=''><a href='../types/Boolean.html'>Boolean</a> loop</span>)</span>
+<p>Creates a timer that fires a trigger after each period.</p>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>millisecondsTimeSpan</td><td><a href='../types/Number/TimeSpan.html'>Number/TimeSpan</a></td><td>yes</td><td>undefined</td><td>If a number, treated as total milliseconds that each period lasts. If a TimeSpan, the amount of time for a period to last.</td></tr>
+<tr><td>loop</td><td><a href='../types/Boolean.html'>Boolean</a></td><td>yes</td><td>undefined</td><td><Optional/Default:false>If true, once the period happens, the timer will execute again.</td></tr>
+</table>
+<h1>Fields</h1>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>Loop</td><td><a href='../types/Boolean.html'>Boolean</a></td><td><Default: false>If set to true, the timer will continue to run. If set to false, the timer will stop running after the next trigger.</td></tr>
+<tr><td>Running</td><td><a href='../types/Boolean.html'>Boolean</a></td><td>Tells if the timer is currently active.</td></tr>
+<tr><td>Tag</td><td><a href='../types/Object.html'>Object</a></td><td>Any object for the timer to hold.</td></tr>
+<tr><td>Type</td><td><a href='../types/String.html'>String</a></td><td>Returns Type.Timer.</td></tr>
+</table>
+<h1>Events</h1><table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>OnTrigger</td><td><a href='../types/Event.html'>Event</a></td><td>Event that is called each time a the period passes.</td></tr>
+</table>

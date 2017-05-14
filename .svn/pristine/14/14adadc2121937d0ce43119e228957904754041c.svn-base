@@ -1,0 +1,480 @@
+﻿///<reference path="~/scripts/NinJa.js" />
+
+var NinJaVisuals = {
+    Version: "1.2",
+    ZIndex: 1000
+};
+
+var Speed = {
+    Slow: 400,
+    Normal: 200,
+    Fast: 100
+};
+
+var Alignment = {
+    Top: 0,
+    Bottom: 1,
+    Left: 2,
+    Right: 3,
+    Center: 4,
+    Middle: 5
+};
+
+var Side = {
+    Top: 0,
+    Bottom: 1,
+    Left: 2,
+    Right: 3
+};
+
+var Direction = {
+    Vertical: 1,
+    Horizontal: 2,
+    Diagonal: 3
+};
+
+var Effects = LazyEnum({
+    None: "none",
+    Fade: "fade",
+    Slide: "slide",
+    FoldVertical: "foldv",
+    FoldHorizontal: "foldh",
+    FoldBoth: "foldd"
+});
+
+var Edge = LazyEnum({
+    NorthWest: Cursor.NorthWest,
+    SouthEast: Cursor.SouthEast,
+    SouthWest: Cursor.SouthWest,
+    NorthEast: Cursor.NorthEast,
+    North: Cursor.North,
+    West: Cursor.West,
+    South: Cursor.South,
+    East: Cursor.East
+});
+
+NinJaVisuals.TextHeight = function (text, fontFamily, fontSize) {
+    ///<summary>Measures the height of the text given the font family and font size.</summary>
+    ///<param name="text" type="String">The text to measure.</param>
+    ///<param name="fontFamily" type="String" optional="true" default="default">(Optional) The family of to use to render the text.</param>
+    ///<param name="fontSize" type="Number" optional="true" default="default">(Optional) The size of the font, in points, to render the text.</param>
+    ///<returns type="Number">Returns the height of the rendered text in pixels.</returns>
+    return 0;
+};
+
+NinJaVisuals.TextWidth = function (text, fontFamily, fontSize) {
+    ///<summary>Measures the width of the text given the font family and font size.</summary>
+    ///<param name="text" type="String">The text to measure.</param>
+    ///<param name="fontFamily" type="String" optional="true" default="default">(Optional) The family of to use to render the text.</param>
+    ///<param name="fontSize" type="Number" optional="true" default="default">(Optional) The size of the font, in points, to render the text.</param>
+    ///<returns type="Number">Returns the width of the rendered text in pixels.</returns>
+};
+
+function Animation(element, property, from, to, time, frames, func) {
+    ///<summary>Represents an animation that modifies a property over a set time in provided number of frames.</summary>
+    ///<param name="element" type="Element">Element to modify for the animation.</param>
+    ///<param name="property" type="String">Property to modify for the animation.</param>
+    ///<param name="from" type="Object">A number or unit (Location, Size, Color, etc) that is the start point of the animation.</param>
+    ///<param name="to" type="Object">A number or unit (Location, Size, Color, etc) that is the end point of the animation</param>
+    ///<param name="time" type="Number">The number of milliseconds the animation should last.</param>
+    ///<param name="frames" type="Number">The number of frames the animation should last.</param>
+    ///<param name="func" type="Function">The function to execute once the animation is finished.</param>
+    ///<field name="Element" type="Element">The element the animation is modifying.</field>
+    ///<field name="Property" type="String">The name of the property the animation is modifying.</field>
+    ///<field name="From" type="Number">Number or unit the animation started from.</field>
+    ///<field name="To" type="Number">Number or unit the animation ends on.</field>
+    ///<field name="Time" type="Number">Number of milliseconds the animation should last.</field>
+    ///<field name="Frames" type="Number">Number of frames the animation should last.</field>
+    ///<field name="Value" type="Number">Number or unit the element is currently set to in the current animation frame.</field>
+    ///<field name="Step" type="Number">Number or unit that represents the amount of change to the property set per frame.</field>
+    ///<field name="Steps" type="Number">Number of frames left in the animation.</field>
+    ///<field name="Timer" type="Timer">The timer used to execute each frame of the animation.</field>
+    ///<field name="OnFinish" type="Function">Function to execute once the animation is funished.</field>
+}
+
+Animation.prototy.Element = new Element();
+Animation.prototy.Property = "";
+Animation.prototy.From = 0;
+Animation.prototy.To = 0;
+Animation.prototy.Time = 0;
+Animation.prototy.Frames = 0;
+Animation.prototy.Value = 0;
+Animation.prototy.Step = 0;
+Animation.prototy.Steps = 0;
+Animation.prototy.Timer = new Timer(0);
+Animation.prototy.OnFinish = function () { };
+
+Animation.prototype.Reverse = function () {
+    ///<summary>Reverses the animation by switch the To and From values.</summary>
+    ///<returns type="Animation">Returns the instance.</returns>
+    return this;
+};
+
+Animation.prototype.Start = function () {
+    ///<summary>Starts the animation.</summary>
+    ///<returns type="Animation">Returns the instance.</returns>
+    return this;
+}
+
+Animation.prototype.Next = function () {
+    ///<summary>Calls the next frame of the animation.</summary>
+    ///<returns type="Animation">Returns the instance.</returns>
+    return this;
+};
+
+Element.prototype.FadeOut = function (time, frames, func) {
+    ///<summary>Fades the element out by modifying the opacity from the current value to 0.</summary>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="6">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.FadeIn = function (time, frames, func) {
+    ///<summary>Fades the element in by modifying the opacity from the current value to 1.</summary>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="6">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.FadeTo = function (opacity, time, frames, func) {
+    ///<summary>Fades the element in by modifying the opacity from the current value to 1.</summary>
+    ///<param name="opacity" type="Number">Opacity value to fade to.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="6">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.ToggleFade = function (time, frames, func) {
+    ///<summary>Fades the element in or out depending on the current value of opacity. A 0 fades it in, anything else fades it out.</summary>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="6">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.ResizeTo = function (size, time, frames, func) {
+    ///<summary>Resizes the element in an animation.</summary>
+    ///<param name="size" type="Size">The size to animate the element to.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="10">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.Shrink = function (direction, time, frames, func) {
+    //<summary>Resizes the element in an animation to a width of 0 and height of 0.</summary>
+    ///<param name="direction" type="String" optional="true" default="Direction.Diagonl">The direction to resize the element in.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="10">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+
+Element.prototype.Grow = function (direction, time, frames, func) {
+    //<summary>Resizes the element in an animation to the full size width and height.</summary>
+    ///<param name="direction" type="String" optional="true" default="Direction.Diagonl">The direction to resize the element in.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="10">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+}
+
+Element.prototype.ToggleSize = function (direction, time, frames, func) {
+    //<summary>Resizes the element in an animation to a width of 0 and height of 0.</summary>
+    ///<param name="direction" type="String" optional="true" default="Direction.Diagonl">The direction to resize the element in.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="10">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.SlideTo = function (location, time, frames, func) {
+    //<summary>Resizes the element in an animation to a width of 0 and height of 0.</summary>
+    ///<param name="location" type="Location">The location to move the element to.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="20">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.BlendBgTo = function (color, time, size, func) {
+    ///<summary>Blends the background color into the provided color.</summary>
+    ///<param name="color" type="Color">Color to bend the background to.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="10">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+Element.prototype.BlendFgTo = function (c, t, s, f) {
+    ///<summary>Blends the foeground color into the provided color.</summary>
+    ///<param name="color" type="Color">Color to bend the foreground to.</param>
+    ///<param name="time" type="Number" optional="true" default="300">Number of milliseconds to execute the animation.</param>
+    ///<param name="frames" type="Number" optional="true" default="10">Number of frames to execute the animation in.</param>
+    ///<param name="func" type="Function" otpional="true">Function to execute once the animation is complete.</param>
+    ///<returns type="Animation">Returns the animation object generated.</returns>
+    return new Animation();
+};
+
+function Size(width, height) {
+    ///<summary>Object that represents a unit of width and height in pixels.</summary>
+    ///<param name="width" type="Number" optional="true">Width in pixels.</param>
+    ///<param name="height" type="Number" optional="true">Height in pixels.</param>
+    ///<field name="Width" type="Number">Width in pixels.</field>
+    ///<field name="Height" type="Number">Height in pixels.</field>
+}
+
+Size.prototype.Width = 0;
+Size.prototype.Height = 0;
+
+function Location(x, y) {
+    ///<summary>Object that represents a unit of x and y position in pixels.</summary>
+    ///<param name="x" type="Number" optional="true">X in pixels.</param>
+    ///<param name="y" type="Number" optional="true">Y in pixels.</param>
+    ///<field name="X" type="Number">X in pixels.</field>
+    ///<field name="Y" type="Number">Y in pixels.</field>
+}
+
+Location.prototype.X = 0;
+Location.prototype.Y = 0;
+
+Anchor.prototype.Size =
+Body.prototype.Size =
+Button.prototype.Size =
+Cell.prototype.Size =
+CheckBox.prototype.Size =
+DropDownList.prototype.Size =
+Content.prototype.Size =
+ContentButton.prototype.Size =
+Div.prototype.Size =
+Element.prototype.Size =
+FileUpload.prototype.Size =
+Header.prototype.Size =
+ImageElement.prototype.Size =
+Label.prototype.Size =
+List.prototype.Size =
+ListBox.prototype.Size =
+ListItem.prototype.Size =
+Password.prototype.Size =
+RadioButton.prototype.Size =
+Row.prototype.Size =
+Span.prototype.Size =
+Table.prototype.Size =
+TableBody.prototype.Size =
+TableFoot.prototype.Size =
+TableHead.prototype.Size =
+TextArea.prototype.Size =
+TextBox.prototype.Size = function (size) {
+    ///<summary>(Property Function) Gets or sets the size of the element as a Size unit object.</summary>
+    ///<param name="size" type="Size" optional="true">(Optional) The size of the object in pixels.</param>
+    ///<returns type="Size">Returns the size of the element as a Size object.</returns>
+    if (size === undefined) {
+        return new Size();
+    }
+
+    return this;
+};
+
+Anchor.prototype.Location =
+Body.prototype.Location =
+Button.prototype.Location =
+Cell.prototype.Location =
+CheckBox.prototype.Location =
+DropDownList.prototype.Location =
+Content.prototype.Location =
+ContentButton.prototype.Location =
+Div.prototype.Location =
+Element.prototype.Location =
+FileUpload.prototype.Location =
+Header.prototype.Location =
+ImageElement.prototype.Location =
+Label.prototype.Location =
+List.prototype.Location =
+ListBox.prototype.Location =
+ListItem.prototype.Location =
+Password.prototype.Location =
+RadioButton.prototype.Location =
+Row.prototype.Location =
+Span.prototype.Location =
+Table.prototype.Location =
+TableBody.prototype.Location =
+TableFoot.prototype.Location =
+TableHead.prototype.Location =
+TextArea.prototype.Location =
+TextBox.prototype.Location = function (location) {
+    ///<summary>(Property Function) Gets or sets the location of the element as a Location unit object.</summary>
+    ///<param name="location" type="Location" optional="true">(Optional) The location of the object in pixels.</param>
+    ///<returns type="Location">Returns the location of the element as a Size object.</returns>
+    if (location === undefined) {
+        return new Location();
+    }
+
+    return this;
+};
+
+function Bounds() {
+    ///<summary>Represents the postions of each edge of an element.</summary>
+    ///<field name="left" type="Number">Left edge of the element.</field>
+    ///<field name="Right" type="Number">Right edge of the element.</field>
+    ///<field name="Top" type="Number">Top edge of the element.</field>
+    ///<field name="Bottom" type="Number">Bottom edge of the element.</field>
+}
+
+Bounds.prototype.Left = 0;
+Bounds.prototype.Right = 0;
+Bounds.prototype.Top = 0;
+Bounds.prototype.Bottom = 0;
+
+Bounds.prototype.Contains = function (x, y) {
+    ///<summary>Determines if the bounds area contains the given x and y values.</summary>
+    ///<param name="x" type="Number">X position in pixels.</param>
+    ///<param name="Y" type="Number">Y position in pixels.</param>
+    ///<returns type="Boolean">Returns whether the x and y position lie within the bounds.</returns>
+    return true;
+};
+
+Bounds.prototype.OnEdge = function (x, y, edge, proximity) {
+    ///<summary>Determines if the x and y position is on the edge of the bounds given the proximity.</summary>
+    ///<param name="x" type="Number">X position.</param>
+    ///<param name="y" type="Number">Y position.</param>
+    ///<param name="edge" type="Edige">The edge to test.</param>
+    ///<param name="proximity" type="Number" optional="true" default="1">How close to the edge the x and y position must be to return true.</param>
+    ///<returns 
+};
+
+Element.prototype.GetBounds = function () {
+    var b = new Bounds();
+    b.Left = this.X()
+    b.Top = this.Y()
+    b.Right = this.LayoutWidth() + b.Left;
+    b.Bottom = this.LayoutHeight() + b.Top;
+    return b;
+};
+
+Client.ElementClipped = function (e, side) {
+    switch (side) {
+        case Side.Top:
+            return e.Y() < 0;
+
+        case Side.Right:
+            return e.X() + e.LayoutWidth() > Client.Width();
+
+        case Side.Bottom:
+            return e.Y() + e.LayoutHeight() > Client.Height();
+
+        case Side.Left:
+            return e.X();
+    }
+}
+
+Element.prototype.SnapTo = function (parentElement, side, alignment, xPad, yPad) {
+    xPad = xPad === undefined ? 0 : xPad;
+    yPad = yPad === undefined ? 0 : yPad;
+    switch (side) {
+        case Side.Top:
+            this.Y(parentElement.Y() - this.LayoutHeight() - yPad);
+            break;
+
+        case Side.Bottom:
+            this.Y(parentElement.Y() + parentElement.LayoutHeight() + yPad);
+            break;
+
+        case Side.Left:
+            this.X(parentElement.X() - this.LayoutWidth() - xPad);
+            break;
+
+        case Side.Right:
+            this.X(parentElement.X() + parentElement.LayoutWidth() + xPad);
+            break;
+    }
+
+    switch (alignment) {
+        case Alignment.Top:
+            this.Y(parentElement.Y());
+            break;
+
+        case Alignment.Bottom:
+            this.Y(parentElement.Y() + parentElement.LayoutHeight() - this.LayoutHeight());
+            break;
+
+        case Alignment.Middle:
+            this.Y((parentElement.Y() + parentElement.LayoutHeight()) - (parentElement.Y() + parentElement.LayoutHeight() / 2));
+            break;
+
+        case Alignment.Left:
+            this.X(parentElement.X());
+            break;
+
+        case Alignment.Right:
+            this.X(parentElement.X() + parentElement.LayoutWidth() - this.LayoutWidth());
+            break;
+
+        case Alignment.Center:
+            this.X((parentElement.X() + parentElement.LayoutWidth()) - (parentElement.X() + parentElement.LayoutWidth() / 2));
+            break;
+
+    }
+}
+
+Client.ElementClipped = function (e, side) {
+    switch (side) {
+        case Side.Top:
+            return e.Y() < 0;
+
+        case Side.Right:
+            return e.X() + e.LayoutWidth() > Client.Width();
+
+        case Side.Bottom:
+            return (e.Y() + e.LayoutHeight()) - Client.VerticalScrollPosition() > Client.Height();
+
+        case Side.Left:
+            return e.X();
+    }
+}
+
+Client.SnapTop = function (e, side) {
+    switch (side) {
+        case Side.Top:
+            e.Y(0);
+            break;
+
+        case Side.Right:
+            e.X(Client.Width() - e.LayoutWidth());
+            break;
+
+        case Side.Bottom:
+            e.Y(Client.Height() - e.LayoutHeight());
+            break;
+
+        case side.Left:
+            e.X(0);
+            break;
+    }
+};
+
+Content.prototype.ElementClipped = function (e) {
+    var parentBounds = this.GetBounds();
+    parentBounds.Left += this.HorizontalScrollPosition();
+    parentBounds.Right += this.HorizontalScrollPosition();
+    parentBounds.Top += this.VerticalScrollPosition();
+    parentBounds.Bottom += this.VerticalScrollPosition();
+    var childBounds = e.GetBounds();
+    return !(childBounds.Left >= parentBounds.Left &&
+             childBounds.Right <= parentBounds.Right &&
+             childBounds.Top >= parentBounds.Top &&
+             childBounds.Bottom <= parentBounds.Bottom);
+}

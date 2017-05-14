@@ -1,0 +1,3 @@
+<html>
+<head>
+<title>KeyValuePair</title><link href='/styles/docs.css' type='text/css' rel='Stylesheet' /></head><body><h1>KeyValuePair - Object Type</h1><h2>Summary</h2><p>Represents a key value pair of a Dictionary.</p><h2>Constructor Syntax</h2><span class='constructorfunction'>new KeyValuePair()<br /><h3>Parameters</h3><h1>Fields</h1><span class='field'><b>Key</b> <br /> Type: <a href='../types/String.html'>String</a><br />Key portion of the pair.</span><span class='field'><b>Value</b> <br /> Type: <a href='../types/Object.html'>Object</a><br />Value portion of the pair.</span><h1>Property Functions</h1><h1>Events</h1>

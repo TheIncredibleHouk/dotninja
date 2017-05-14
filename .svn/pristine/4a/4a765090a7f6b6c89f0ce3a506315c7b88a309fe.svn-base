@@ -1,0 +1,47 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="hideshow.aspx.cs" Inherits="examples_visuals" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Accordion Example</title>
+    <link href="/styles/main.css" type="text/css" rel="Stylesheet" />
+    <style type="text/css">
+        *
+        {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        
+        h2
+        {
+            background: #800000;
+            border: #400000 2px solid;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        
+        #more_content
+        {
+            border: 2px solid #000000;
+            display: none;
+        }
+        
+    </style>
+    <script type="text/javascript" src="/scripts/NinJa.js"></script>
+    <script type="text/javascript" src="/scripts/NinJaVisuals.js"></script>
+    <script type="text/javascript">
+        function hideShowContent() {
+            $Div("more_content").Collapsed(!$Div("more_content").Collapsed());
+        }
+    </script>
+</head>
+<body>
+    <h1>Hide and Show Content</h1>
+    <h2 onclick="hideShowContent()">Click to toggle content.</h2>
+    <div id="more_content">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non erat nec felis volutpat pharetra id non nisl. Nunc lorem nulla, dignissim at gravida et, interdum vel tellus. Mauris sapien massa, suscipit nec tincidunt vel, cursus ac metus. Proin laoreet odio ac arcu pretium non adipiscing urna consequat. Mauris sodales nunc metus, nec tristique eros. In lorem ipsum, pulvinar pulvinar aliquam vel, scelerisque vel nisl. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse potenti. Vivamus ut diam eget neque porttitor rhoncus. Nam pulvinar, erat vel semper sagittis, lacus est lacinia lectus, sed tincidunt ipsum odio ac mauris. Proin in ipsum vitae justo porta porttitor sed nec risus.
+    </div>
+</body>
+</html>

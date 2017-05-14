@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>ObservableArray - Object Type</title>
+<link href='/styles/docs.css' type='text/css' rel='Stylesheet' />
+</head>
+<body>
+<h1>ObservableArray - Object Type</h1>
+<h2>Summary</h2>
+<p>Creates a Array class with modification events. These events do not fire on native JavaScript array manipulation.</p>
+<h2>Constructor</h2>
+<span class='constructor'>new ObservableArray(<span class='optional'><a href='../types/Object.html'>Object</a> owner</span>)</span>
+<p>Creates a Array class with modification events. These events do not fire on native JavaScript array manipulation.</p>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>owner</td><td><a href='../types/Object.html'>Object</a></td><td>no</td><td>undefined</td><td>(Optional) The owner of the ObservableArray.</td></tr>
+</table>
+<h1>Fields</h1>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>length</td><td><a href='../types/Number.html'>Number</a></td><td>Number of objects in the array.</td></tr>
+<tr><td>Updating</td><td><a href='../types/Boolean.html'>Boolean</a></td><td>When set to true, events do not fire for any modification.</td></tr>
+<tr><td>Type</td><td><a href='../types/String.html'>String</a></td><td>Returns Type.ObservableArray</td></tr>
+</table>
+<h1>Events</h1><table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>OnChange</td><td><a href='../types/Event.html'>Event</a></td><td> Fired when the array has changed.</td></tr>
+</table>

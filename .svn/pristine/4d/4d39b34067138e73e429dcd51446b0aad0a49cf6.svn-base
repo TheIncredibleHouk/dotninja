@@ -1,0 +1,71 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="calendar.aspx.cs" Inherits="examples_calendar" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Accordion Example</title>
+    <link href="/styles/main.css" type="text/css" rel="Stylesheet" />
+    <style type="text/css">
+        *
+        {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        
+        .calendar
+        {
+            border: 2px solid #004000;
+            background-color: #408000;
+            color: #ffffff;
+        }
+        
+        td.selected
+        {
+            background-color: #ffc000 !important;
+        }
+        
+        .calendar td.pad
+        {
+            background-color: #c0c0c0;
+            color: #000000;
+        }
+        
+        .calendar td:hover
+        {
+            background-color: #90e000;
+        }
+        
+        .calendar td
+        {
+            background-color: #80c000;
+            cursor: pointer;
+            min-width: 32px;
+            min-height: 32px;
+        }
+        
+        .calendar a
+        {
+            color: #ffffff;
+            font-weight: bold;
+            text-decoration: none;
+
+        }
+    </style>
+    <script type="text/javascript" src="/scripts/NinJa.js"></script>
+    <script type="text/javascript" src="/scripts/NinJaVisuals.js"></script>
+    <script type="text/javascript" src="/scripts/NinJaControls.js"></script>
+    <script type="text/javascript">
+        Page.OnLoad.Add(function () {
+            $Calendar("my_cal").SelectedDate(new DateTime(1983, 4, 1));
+        });
+
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        Enter Date: <input id="my_cal" type="text" effect="fade" pad="true" class="calendar" />
+    </form>
+</body>
+</html>

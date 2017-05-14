@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "NinJa", ".", "{241776BB-4447-42E7-81AC-FA305933EB84}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/NinJa"
+		Debug.AspNetCompiler.PhysicalPath = "..\NinJa\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\NinJa\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/NinJa"
+		Release.AspNetCompiler.PhysicalPath = "..\NinJa\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\NinJa\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "9001"
+		VWDDynamicPort = "false"
+		VWDVirtualPath = "/"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinJa.Controls", "..\NinJa.Controls\NinJa.Controls.csproj", "{8BEEE3D0-7C1E-4BFE-BFF9-25A33F763C76}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{241776BB-4447-42E7-81AC-FA305933EB84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{241776BB-4447-42E7-81AC-FA305933EB84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{241776BB-4447-42E7-81AC-FA305933EB84}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{241776BB-4447-42E7-81AC-FA305933EB84}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8BEEE3D0-7C1E-4BFE-BFF9-25A33F763C76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BEEE3D0-7C1E-4BFE-BFF9-25A33F763C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BEEE3D0-7C1E-4BFE-BFF9-25A33F763C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BEEE3D0-7C1E-4BFE-BFF9-25A33F763C76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

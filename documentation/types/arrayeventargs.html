@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>ArrayEventArgs - Object Type</title>
+<link href='/styles/docs.css' type='text/css' rel='Stylesheet' />
+</head>
+<body>
+<h1>ArrayEventArgs - Object Type</h1>
+<h2>Summary</h2>
+<p>Contains information about a array modification event.</p>
+<h2>Constructor</h2>
+<span class='constructor'>new ArrayEventArgs(<span class=''><a href='../types/Object.html'>Object</a> sender</span>, <span class=''><a href='../types/Object.html'>Object</a> data</span>)</span>
+<p>Contains information about a array modification event.</p>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>sender</td><td><a href='../types/Object.html'>Object</a></td><td>yes</td><td>undefined</td><td>The object sending the event.</td></tr>
+<tr><td>data</td><td><a href='../types/Object.html'>Object</a></td><td>yes</td><td>undefined</td><td>(Optional)Any data to send to the handlers.</td></tr>
+</table>
+<h1>Fields</h1>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>CancelEvent</td><td><a href='../types/Boolean.html'>Boolean</a></td><td>If set to true, no other handlers will be executed.</td></tr>
+<tr><td>Index</td><td><a href='../types/Number.html'>Number</a></td><td>Index of the object modifcation.</td></tr>
+<tr><td>ModificationType</td><td><a href='../types/ModificationType.html'>ModificationType</a></td><td>Indicates the type of modification: Add, Remove or Clear.</td></tr>
+<tr><td>Objects</td><td><a href='../types/Array.html'>Array</a></td><td>Objects affected by the array modification.</td></tr>
+<tr><td>Sender</td><td><a href='../types/Object.html'>Object</a></td><td>The object that sent the event.</td></tr>
+<tr><td>Type</td><td><a href='../types/String.html'>String</a></td><td>Returns Type.EventArgs</td></tr>
+</table>

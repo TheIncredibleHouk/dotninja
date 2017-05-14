@@ -1,0 +1,47 @@
+﻿///<reference path="~/scripts/NinJa.js" />
+///<reference path="~/scripts/NinJaVisuals.js" />
+
+DropDownList.Extensions.Add(new Extension("skinned", SkinnedList));
+
+function SkinnedList(e) {
+    if (e === undefined || e.Type == Type.String) {
+        e = NinJa.CreateElement("select", e);
+    }
+
+    var b = this.Base = $DropDownList(this);
+
+    this.Text = e = new Anchor().Style(Style.Display, "inline-block").ClassName("select");
+
+    this.Display = new Div().ClassName("select").Position("absolute").Collapsed(true);
+    this.Base.Parent().InsertElementBefore(e, this.Base);
+    this.Base.Parent().InsertElementBefore(this.Display, this.Base);
+    this.Base.Options.OnChange.Add(new Delegate(this.UpdateOptions, this));
+    this.Base.OnSelectionChanged.Add(new Delegate(this.UpdateValue, this));
+    this.UpdateOptions();
+    this.UpdateValue();
+    this.Text.OnFocus.Add(new Delegate(this.Display.Collapsed, this.Display, [false]));
+    this.Text.OnBlur.Add(new Delegate(this.Display.Collapsed, this.Display, [true]));
+}
+
+SkinnedList.prototype.SelectOption = function (o) {
+    this.Base.SelectedValue(o);
+};
+
+SkinnedList.prototype.UpdateOptions = function () {
+    var v = this.Visible(), c = this.Collapsed(), d;
+    this.Display.ClearContent().Visible(false).Collapsed(false);
+
+    var a = this.Base.Options, l = a.length, i;
+    for (i = 0; i < l; i++) {
+        d = new Div().Text(a[i].Text());
+        this.Display.AddElement(d);
+        d.OnMouseDown.Add(new Delegate(this.SelectOption, this, [a[i].Value()]));
+    }
+
+    this.Text.Width(this.Display.Width());
+    this.Display.Collapsed(true).Visible(true);
+};
+
+SkinnedList.prototype.UpdateValue = function () {
+    this.Text.Text(this.Base.SelectedText());
+}

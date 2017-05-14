@@ -1,0 +1,185 @@
+﻿///<reference path="~/scripts/NinJa.js" />
+///<reference path="~/scripts/NinJaBinding.js" />
+
+Div.Extensions.Add(new Extension("templatelist", TemplateList));
+
+Type.TemplateList = "TemplateList";
+$TemplateList = $Anchor;
+
+function TemplateList(e) {
+    if (this.DOM === undefined) {
+        return TemplateList.Inherit(TemplateList.Extend(new Div(e).ClassName("templatelist")));
+    }
+
+    var $ = this;
+    e = $.DOM;
+    $.Items = new ObservableArray();
+    $.Items.OnChange.Add(new Delegate($.Refresh, $, [Delegate.Event]));
+    $.__Template = $.DOM.cloneNode();
+    $.ClearContent();
+}
+
+TemplateList.prototype.Bind = function (b) {
+    this.Items.BeginUpdate().Clear().AddRange(b).EndUpdate();
+};
+
+TemplateList.prototype.Refresh = function (e) {
+    var t, o = e.Objects, l = o.length, i;
+    switch (e.ModificationType) {
+        case ModificationType.Add:
+            for (i = 0; i < l; i++) {
+                t = new Template(this.__Template.cloneNode()).Bind(o[i]);
+                NinJa.WrapObjects(t.DOM);
+                this.InsertElement(e.Index + i, t);
+            }
+            break;
+
+        case ModificationType.Remove:
+        case ModificationType.Clear:
+            for (i = 0; i < l; i++) {
+                this.DOM.removeChild(this.DOM.childNodes[e.Index + i]);
+            }
+            break;
+
+        case ModificationType.Update:
+            for (i = 0; i < l; i++) {
+                if (this.DOM.childNodes.length > 0) {
+                    this.DOM.removeChild(this.DOM.childNodes[e.Index + i]);
+                }
+            }
+
+            for (i = 0; i < l; i++) {
+                t = new Template(this.__Template.cloneNode()).Bind(o[i]);
+                NinJa.WrapObjects(t.DOM);
+                this.InsertElement(e.Index + i, t);
+            }
+            break;
+
+        case ModificationType.Swap:
+            a = o[0].DOM;
+            b = o[1].DOM;
+            p = document.createTextNode("beep");
+            x.$ib(p, a);
+            x.$rc(a);
+            x.$ib(a, b);
+            x.$rc(b);
+            x.$ib(b, p);
+            x.$rc(p);
+            delete p;
+            break;
+
+        case ModificationType.Move:
+            a = o[0].DOM;
+            p = document.createTextNode("meep");
+            x.$ib(p, a);
+            x.$rc(a);
+            e.Index;
+            if (e.Index >= lc) {
+                x.$ap(a);
+            }
+            else {
+                x.$ib(a, c[e.Index]);
+            }
+            x.$rc(p);
+            delete p;
+            break;
+    }
+};
+
+
+Table.Extensions.Add(new Extension("templatelist", TemplateTableList));
+
+Type.TemplateList = "TemplateList";
+$TemplateTableList = $Anchor;
+
+function TemplateTableList(e) {
+    if (this.DOM === undefined) {
+        return TemplateTableList.Inherit(TemplateTableList.Extend(new Table(e).ClassName("templatelist")));
+    }
+
+    var $ = this;
+    e = $.DOM;
+    $.Items = new ObservableArray();
+    $.Items.OnChange.Add(new Delegate($.Refresh, $, [Delegate.Event]));
+    //$.TemplateControls = new ObservableArray();
+    $.__Template = $.Body.Rows[0].DOM.cloneNode(true);
+    $.Rows.Clear();
+}
+
+TemplateTableList.prototype.Bind = function (b) {
+    this.Items.BeginUpdate().Clear().AddRange(b).EndUpdate();
+};
+
+TemplateTableList.prototype.Refresh = function (e) {
+    var t, o = e.Objects, l = o.length, i;
+    switch (e.ModificationType) {
+        case ModificationType.Add:
+            for (i = 0; i < l; i++) {
+                t = new TemplateRow(this.__Template.cloneNode(true));
+                t.Bind(o[i]);
+                NinJa.WrapObjects(t.DOM);
+                this.Rows.Insert(e.Index + i, t);
+            }
+            break;
+
+        case ModificationType.Clear:
+            this.Rows.Clear();
+            break;
+
+        case ModificationType.Remove:
+            for (i = l - 1; i >= 0; i--) {
+                this.Rows.RemoveAt(e.Index + i);
+            }
+            break;
+
+        case ModificationType.Update:
+            this.Rows.Clear();
+
+            for (i = 0; i < l; i++) {
+                t = new TemplateRow(this.__Template.cloneNode(true));
+                t.Bind(o[i]);
+                NinJa.WrapObjects(t.DOM);
+                this.Rows.Insert(e.Index + i, t);
+            }
+            break;
+    }
+};
+
+$TemplateRow = $Anchor;
+Type.TemplateRow = Type.$++;
+
+Row.Extensions.Add(new Extension("template", Template));
+function TemplateRow(e) {
+    if (this.DOM === undefined) {
+        return TemplateRow.Inherit(TemplateRow.Extend(new Row(e).ClassName("template")));
+    }
+
+    if (e !== undefined) {
+        this.Bind(null);
+    }
+}
+
+TemplateRow.prototype.Bind = function (obj) {
+    obj = obj || {};
+    var k;
+    if (!this.Template) {
+        this.Template = true;
+        this.__all = NinJaControls.__GetAllNodes(this.DOM, []);
+        this.__nodeValues = [];
+        k = this.__all.length;
+        for (var j = 0; j < k; j++) {
+            this.__nodeValues.push(this.__all[j].nodeValue);
+        }
+    }
+
+    var reg = /\{[A-Za-z\.]*}/i, property, a, b, v, w, x, y, l = this.__all.length;
+    for (var i = 0; i < l; i++) {
+        v = this.__nodeValues[i];
+        w = this.__all[i];
+        w.nodeValue = String.BindFormat(v, obj);
+    }
+
+    this.Tag = obj;
+    this.Type = Type.TemplateRow;
+    return this;
+};

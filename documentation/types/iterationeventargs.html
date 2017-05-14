@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>IterationEventArgs - Object Type</title>
+<link href='/styles/docs.css' type='text/css' rel='Stylesheet' />
+</head>
+<body>
+<h1>IterationEventArgs - Object Type</h1>
+<h2>Summary</h2>
+<p>Contains information about a array iteration event from calling ForEach or ForEachReversed.</p>
+<h2>Constructor</h2>
+<span class='constructor'>new IterationEventArgs(<span class=''><a href='../types/Object.html'>Object</a> sender</span>, <span class=''><a href='../types/Object.html'>Object</a> data</span>)</span>
+<p>Contains information about a array iteration event from calling ForEach or ForEachReversed.</p>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>sender</td><td><a href='../types/Object.html'>Object</a></td><td>yes</td><td>undefined</td><td>The object sending the event.</td></tr>
+<tr><td>data</td><td><a href='../types/Object.html'>Object</a></td><td>yes</td><td>undefined</td><td>(Optional)Any data to send to the handlers.</td></tr>
+</table>
+<h1>Fields</h1>
+<table class='parameters'>
+<tr><th>Name</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>CancelEvent</td><td><a href='../types/Boolean.html'>Boolean</a></td><td>If set to true, ForEach loop stops.</td></tr>
+<tr><td>Index</td><td><a href='../types/Number.html'>Number</a></td><td>Current index of the iteration.</td></tr>
+<tr><td>Object</td><td><a href='../types/Object.html'>Object</a></td><td>Current object of the array.</td></tr>
+<tr><td>Sender</td><td><a href='../types/Object.html'>Object</a></td><td>The object that sent the event.</td></tr>
+<tr><td>Navigate</td><td><a href='../types/Number.html'>Number</a></td><td>Used to control looping. Changing this will affect the next iteration. A postive number means skipping the number of elements. A negative number means going back to already touched elements. After each iteration, Navigate is set back to 0.</td></tr>
+<tr><td>Type</td><td><a href='../types/String.html'>String</a></td><td>Returns Type.EventArgs</td></tr>
+</table>

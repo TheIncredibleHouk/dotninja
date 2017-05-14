@@ -1,0 +1,468 @@
+﻿///<reference path="~/scripts/NinJa.js" />
+
+var NinJaVisuals = {
+    Version: "1.2",
+    ZIndex: 1000
+};
+
+var Speed = {
+    Slow: 400,
+    Normal: 200,
+    Fast: 100
+};
+
+var Alignment = {
+    Top: 0,
+    Bottom: 1,
+    Left: 2,
+    Right: 3,
+    Center: 4,
+    Middle: 5
+};
+
+var Aspect = {
+    Outside: 0,
+    Inside: 1
+};
+
+var Side = {
+    Top: 1,
+    Bottom: 2,
+    Left: 4,
+    Right: 8,
+    All: 15
+};
+
+var Direction = {
+    Vertical: 1,
+    Horizontal: 2,
+    Diagonal: 3
+};
+
+var Effects = LazyEnum({
+    None: "none",
+    Fade: "fade",
+    Slide: "slide",
+    FoldVertical: "foldv",
+    FoldHorizontal: "foldh",
+    FoldBoth: "foldd"
+});
+
+var Edge = LazyEnum({
+    NorthWest: Cursor.NorthWest,
+    SouthEast: Cursor.SouthEast,
+    SouthWest: Cursor.SouthWest,
+    NorthEast: Cursor.NorthEast,
+    North: Cursor.North,
+    West: Cursor.West,
+    South: Cursor.South,
+    East: Cursor.East
+});
+
+NinJaVisuals.TextHeight = function (t, f, s) {
+    var d = new Span();
+    f = f || "default";
+    s = s || "default";
+    d.Position("absolute").Style(Style.Padding, "0").Style(Style.Margin, "0").Style(Style.FontFamily, f).Style(Style.FontSize, s + "pt").Text(t);
+    Page.AddElement(d);
+    s = d.Height();
+    Page.Remove(d);
+    return s;
+};
+
+NinJaVisuals.TextWidth = function (t, f, s) {
+    var d = new Span();
+    f = f || "default";
+    s = s || "default";
+    d.Position("absolute").Style(Style.Padding, "0").Style(Style.Margin, "0").Style(Style.FontFamily, f).Style(Style.FontSize, s + "pt").Text(t);
+    Page.AddElement(d);
+    s = d.Width();
+    Page.Remove(d);
+    return s;
+};
+
+function Animation(el, pr, fr, to, ti, sm, f) {
+    this.Element = el;
+    this.Property = pr;
+    this.From = fr;
+    this.To = to;
+    this.Time = ti;
+    this.Frames = sm;
+    this.Value = fr;
+    this.Step = this.From.GetIncrements(this.To, sm);
+    this.Steps = sm;
+    this.Timer = new Timer(ti / sm, true);
+    this.Timer.OnTrigger.Add(new Delegate(this.Next, this));
+    this.OnFinish = f;
+}
+
+Animation.prototype.Reverse = function () {
+    var to = this.To;
+    this.To = this.From;
+    this.From = to;
+    this.Value = this.From;
+    this.Steps = this.Frames;
+    if (this.To.Type != Type.Array) {
+        this.Step = this.From.GetIncrements(this.To, this.Steps);
+    }
+    else {
+        this.Index = 0;
+    }
+    return this.Start();
+};
+
+Animation.prototype.Start = function () {
+    this.Element[this.Property](this.From);
+    this.Timer.Start();
+    this.Next();
+    return this;
+}
+
+Animation.prototype.Next = function () {
+    if (this.Index !== undefined) {
+        this.Index++;
+        if (this.Index >= this.To.length) {
+            this.Index = 0;
+        }
+        this.Value = this.To[this.Index];
+    }
+    else {
+        this.Value = this.Value.Increment(this.Step);
+    }
+
+    this.Element[this.Property](this.Value);
+    this.Steps--;
+    if (this.Steps == 0) {
+        this.Element[this.Property](this.To);
+        this.Timer.Stop();
+        if (this.OnFinish) {
+            this.OnFinish();
+        }
+    }
+
+};
+
+Element.prototype.FadeOut = function (t, s, f) {
+    t = t || 300;
+    s = s || 6;
+    return new Animation(this, "Opacity", this.Opacity(), 0, t, s, f).Start();
+};
+
+Element.prototype.FadeIn = function (t, s, f) {
+    t = t || 300;
+    s = s || 6;
+    return new Animation(this, "Opacity", this.Opacity(), 1, t, s, f).Start();
+};
+
+Element.prototype.FadeTo = function (x, t, s, f) {
+    t = t || 300;
+    s = s || 6;
+    return new Animation(this, "Opacity", this.Opacity(), x, t, s, f).Start();
+};
+
+Element.prototype.ToggleFade = function (t, s, f) {
+    t = t || 300;
+    s = s || 6;
+    return this.Opacity() == 1 ? this.FadeOut(t, s, f) : this.FadeIn(t, s, f);
+};
+
+Element.prototype.ResizeTo = function (sz, t, s, f) {
+    t = t || 300;
+    s = s || 10;
+    return new Animation(this, "Size", this.Size(), sz, t, s, f).Start();
+};
+
+Element.prototype.Shrink = function (d, t, s, f) {
+    d = d || Direction.Diagonal;
+    t = t || 300;
+    s = s || 20;
+    var to, sz = this.Size(), tz = this.Size();;
+    if (d & Direction.Horizontal)
+        tz.Width = 0;
+
+    if (d & Direction.Vertical)
+        tz.Height = 0;
+
+    return new Animation(this, "Size", this.Size(), tz, t, s, f).Start();
+};
+
+Element.prototype.SlideTo = function (l, t, s, f) {
+    t = t || 300;
+    s = s || 20;
+    return new Animation(this, "Location", this.Location(), l, t, s, f).Start();
+};
+
+Element.prototype.Grow = function (d, t, s, f) {
+    d = d || Direction.Diagonal;
+    t = t || 300;
+    s = s || 20;
+    var v = this.Visible();
+    var os = this.Size();
+    this.Visible(false).Style(Style.Width, "").Style(Style.Height, "");
+    var ts = this.Size(), tz = new Size();
+
+    if (d & Direction.Horizontal)
+        tz.Width = ts.Width;
+
+    if (d & Direction.Vertical)
+        tz.Height = ts.Height;
+
+    this.Size(os).Visible(v);
+    return new Animation(this, "Size", os, tz, t, s, f).Start();
+}
+
+Element.prototype.ToggleSize = function (d, t, s, f) {
+    if (this.Width() == 0) {
+        return this.Grow(d, t, s, f);
+    }
+
+    return this.Shrink(d, t, s, f);
+};
+
+Element.prototype.BlendBgTo = function (c, t, s, f) {
+    t = t || 200;
+    s = s || 10;
+    if (c.Type != Type.Color) {
+        c = Color.FromRGB(c);
+    }
+    var b = this.BackgroundColor();
+    if (b.Type != Type.Color) {
+        b = Color.FromRGB(b);
+    }
+    return new Animation(this, "BackgroundColor", b, c, t, s, f).Start();
+};
+
+Element.prototype.BlendFgTo = function (c, t, s, f) {
+    t = t || 200;
+    s = s || 10;
+    if (c.Type != Type.Color) {
+        c = Color.FromRGB(c);
+    }
+    var b = this.BackgroundColor();
+    if (b.Type != Type.Color) {
+        b = Color.FromRGB(b);
+    }
+    return new Animation(this, "ForegroundColor", b, c, t, s, f).Start();
+};
+
+function Size(w, h) {
+    this.Width = w;
+    this.Height = h;
+}
+
+Size.prototype.Increment = function (s) {
+    return new Size(this.Width + s.Width, this.Height + s.Height);
+};
+
+Size.prototype.GetIncrements = function (n, s) {
+    return new Size((n.Width - this.Width) / s, (n.Height - this.Height) / s);
+};
+
+
+function Location(x, y) {
+    this.X = x;
+    this.Y = y;
+}
+
+Location.prototype.Increment = function (l) {
+    return new (this.X + l.X, this.Y + l.Y);
+};
+
+Location.prototype.GetIncrements = function (n, s) {
+    return new Location((n.X - this.X) / s, (n.Y - this.Y) / s);
+};
+
+
+Number.prototype.Increment = function (n) {
+    return this + n;
+}
+
+Number.prototype.GetIncrements = function (n, s) {
+    return (n - this) / s;
+};
+
+Color.prototype.Increment = function (c) {
+    return new Color(this.Red + c.Red, this.Green + c.Green, this.Blue + c.Blue);
+};
+
+Color.prototype.GetIncrements = function (c, s) {
+    return new Color((c.Red - this.Red) / s, (c.Green - this.Green) / s, (c.Blue - this.Blue) / s);
+};
+
+Element.prototype.Size = function (s) {
+    if (s === undefined) {
+        return new Size(this.Width(), this.Height());
+    }
+
+    if (s.Width !== undefined) {
+        this.Width(s.Width);
+    }
+    if (s.Height !== undefined) {
+        this.Height(s.Height);
+    }
+
+    return this;
+};
+
+Element.prototype.Location = function (l) {
+    if (l === undefined) {
+        return new Location(this.X(), this.Y());
+    }
+
+    this.X(l.X).Y(l.Y);
+    return this;
+};
+
+function Bounds(l, r, t, b) {
+    this.Left = l || 0;
+    this.Right = r || 0;
+    this.Top = t || 0;
+    this.Bottom = b || 0;
+}
+
+Bounds.prototype.Contains = function (x, y) {
+    return x.Between(this.Left, this.Right, true) && y.Between(this.Top, this.Bottom, true);
+};
+
+Bounds.prototype.OnEdge = function (x, y, e, p) {
+    p = p || 1;
+    switch (e) {
+        case Edge.North:
+            return y - this.Top <= p;
+
+        case Edge.NorthWest:
+            return y - this.Top <= p && x - this.Left <= p;
+
+        case Edge.West:
+            return x - this.Left <= p;
+
+        case Edge.SouthWest:
+            return this.Bottom - y <= p && x - this.Left <= p;
+
+        case Edge.South:
+            return this.Bottom - y <= p;
+
+        case Edge.SouthEast:
+            return this.Bottom - y <= p && this.Right - x <= p;
+
+        case Edge.East:
+            return this.Right - x <= p;
+
+        case Edge.NorthEast:
+            return y - this.Top <= p && this.Right - x <= p;
+    }
+};
+
+Element.prototype.GetBounds = function () {
+    var b = new Bounds();
+    b.Left = this.X()
+    b.Top = this.Y()
+    b.Right = this.LayoutWidth() + b.Left;
+    b.Bottom = this.LayoutHeight() + b.Top;
+    return b;
+};
+
+Element.prototype.SnapTo = function (e, s, a, p, xP, yP) {
+    var b, u = this.Width(), v = this.Height(), x, y;
+    xP = xP || 0;
+    yP = yP || 0;
+    p = p || 0;
+
+    if (e == Client) {
+        var h = Client.HorizontalScrollPosition();
+        var v = Client.VerticalScrollPosition();
+        b = new Bounds(h, Client.Width() + h, v, Client.Height() + v);
+    }
+    else {
+        b = e.GetBounds();
+    }
+
+    if (p == 0) {
+        switch (s) {
+            case Side.Left:
+                x = b.Left - u - xP;
+                break;
+
+            case Side.Right:
+                x = b.Right + xP;
+                break;
+
+            case Side.Top:
+                y = b.Top - v - yP;
+                break;
+
+            case Side.Bottom:
+                y = b.Bottom + yP;
+                break;
+        }
+    }
+    else {
+        switch(s){
+            case Side.Left:
+                x = b.Left + xP;
+            break;
+
+            case Side.Right:
+                x = b.Right - u - xP;
+                break;
+
+            case Side.Top:
+                y = b.Top + yP;
+                breka;
+
+            case Side.Bottom:
+                y = b.Bottom - v - yP;
+                break;
+        }
+    }
+
+
+    switch (a) {
+        case Alignment.Left:
+            x = b.Left + xP;
+            break;
+
+        case Alignment.Right:
+            x = b.Right - u - xP;
+            break;
+            
+        case Alignment.Center:
+            x = parseInt((b.Left + b.Right) / 2 - (u / 2));
+
+        case Alignment.Top:
+            y = b.Top + yP;
+            break;
+
+        case Alignment.Bottom:
+            y = b.Bottom - v - yP;
+            break;
+
+        case Alignment.Middle:
+            y = parseInt((b.Top + b.Bottom) / 2 - (v / 2));
+            break;
+    }
+
+    this.X(x).Y(y);
+    return this;
+}
+
+Content.prototype.IsClipped = function (e) {
+    var c = this.GetBounds();
+    var p;
+    if (e == Client) {
+        p = new Bounds(0, Client.Width(), 0, Client.Height());
+    }
+    else {
+        p = e.GetBounds()
+    }
+
+    p.Left += Client.HorizontalScrollPosition();
+    p.Right += Client.HorizontalScrollPosition();
+    p.Top += Client.VerticalScrollPosition();
+    p.Bottom += Client.VerticalScrollPosition();
+    
+    return !(c.Left >= p.Left &&
+             c.Right <= p.Right &&
+             c.Top >= p.Top &&
+             c.Bottom <= p.Bottom);
+}

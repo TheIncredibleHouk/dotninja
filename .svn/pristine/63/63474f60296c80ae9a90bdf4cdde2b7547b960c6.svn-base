@@ -1,0 +1,207 @@
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml.Linq;
+
+namespace VSDocParser
+{
+    public class JSItem
+    {
+        public string Name { get; set; }
+        public string Summary { get; set; }
+    }
+
+    public class JSReturnType : JSItem
+    {
+    }
+
+    public class JSEnumeration : JSItem
+    {
+    }
+
+    public class JSStaticObject : JSItem
+    {
+    }
+
+    public class JSObject : JSItem
+    {
+        public List<JSField> Fields { get; set; }
+        public List<JSParameter> Parameters { get; set; }
+        public List<JSPropertyFunction> Properties { get; set; }
+    }
+
+    public class JSFunction : JSItem
+    {
+        public List<JSParameter> Parameters { get; set; }
+        public JSReturnType ReturnType { get; set; }
+    }
+
+    public class JSPropertyFunction : JSItem
+    {
+        public List<JSParameter> Parameters { get; set; }
+        public JSReturnType ReturnType { get; set; }
+    }
+
+    public class JSParameter : JSItem
+    {
+        public string Type { get; set; }
+        public bool Optional { get; set; }
+    }
+
+    public class JSField : JSItem
+    {
+        public string Name { get; set; }
+        public string Type { get; set; }
+    }
+
+    public static class Parser
+    {
+        public static Dictionary<string, JSFunction> Functions = new Dictionary<string, JSFunction>();
+        public static Dictionary<string, JSObject> Objects = new Dictionary<string, JSObject>();
+        public static Dictionary<string, JSStaticObject> StaticObjects = new Dictionary<string, JSStaticObject>();
+        public static Dictionary<string, JSEnumeration> Enumerations = new Dictionary<string, JSEnumeration>();
+        public static List<string> Errors = new List<string>();
+
+        public static void ParseFile(string fileName, string documentationPath)
+        {
+            string[] allLines = File.ReadAllLines(fileName);
+            string currentXML = "";
+            string previousLine = "";
+            bool readingComment = false;
+            int index = 0;
+            
+            foreach (string s in allLines)
+            {
+                if (!readingComment && s.Contains("///"))
+                {
+                    currentXML = "<codesnippet>" + previousLine + "</codesnippet>" + s.Substring(s.IndexOf("///" + 3));
+                    readingComment = true;
+                }
+                else if (readingComment && s.Contains("///"))
+                {
+                    currentXML += s.Substring(s.IndexOf("///") + 3);
+                }
+                else
+                {
+                    readingComment = false;
+                }
+
+                previousLine = s;
+            }
+        }
+
+        public static void ProduceDocumentation(string xmlParts)
+        {
+            XElement el;
+            try
+            {
+            el = XElement.Parse(xmlParts);
+            }
+            catch
+            {
+                Errors.Add("Unable to parse out XML portion:\n" + xmlParts);
+                return;
+            }
+
+            string summary;
+            List<JSParameter> parameters = new List<JSParameter>();
+            List<JSField> fields = new List<JSField>();
+            List<JSPropertyFunction> properties = new List<JSPropertyFunction>();
+            JSReturnType returnType = new JSReturnType();
+            JSObject dObject = new JSObject();
+            JSStaticObject sObject = new JSStaticObject();
+            
+            string workingLine = "";
+            string funcName = "";
+
+            foreach (XElement n in el.Elements())
+            {
+                string name = n.Name.LocalName.ToLower();
+                
+                switch (name)
+                {
+                    case "codesnippet":
+                        workingLine = n.Value;
+                        if (workingLine.Contains("="))
+                        {
+                            workingLine = workingLine.Replace("function", "");
+                            funcName = workingLine.Substring(0, workingLine.IndexOf("(")).Trim();
+                        }
+                        break;
+
+                    case "summary":
+                        summary = n.Value;
+                        break;
+
+                    case "param":
+                        foreach(XAttribute xa in n.Attributes()){
+                            JSParameter newParameter = new JSParameter();
+                            switch (xa.Name.LocalName.ToLower())
+                            {
+                                case "name":
+                                    newParameter.Name = xa.Value;
+                                    break;
+
+                                case "type":
+                                    newParameter.Type = xa.Value;
+                                    break;
+
+                                case "optional":
+                                    newParameter.Optional = xa.Value == "true";
+                                    break;
+                            }
+
+                            newParameter.Summary = n.Value;
+                            parameters.Add(newParameter);
+                        }
+                        break;
+
+                    case "field":
+                        JSItem newItem;
+                        if (n.Value.Contains("Property Function"))
+                        {
+                            newItem = new JSPropertyFunction();
+                            workingLine = n.Value.Substring(n.Value.IndexOf("&gt;")).Trim();
+                        }
+
+                        foreach (XAttribute xa in n.Attributes())
+                        {
+                            switch (xa.Name.LocalName.ToLower())
+                            {
+                                case "name":
+                                    newField.Name = xa.Value;
+                                    break;
+
+                                case "type":
+                                    newField.Type = xa.Value;
+                                    break;
+                            }
+
+                            newField.Summary = n.Value;
+                            fields.Add(newField);
+                        }
+                        break;
+
+                    case "return":
+                        foreach (XAttribute xa in n.Attributes())
+                        {
+                            switch (xa.Name.LocalName.ToLower())
+                            {
+                                case "type":
+                                    returnType.Name = xa.Value;
+                                    break;
+                            }
+                            returnType.Summary = n.Value;
+                        }
+                        break;
+
+                    default:
+                        Parser.Errors.Add("Unrecognized XML node: " + name);
+                        break;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,75 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="array.aspx.cs" Inherits="examples_array" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Array Examples</title>
+    <link href="/styles/main.css" type="text/css" rel="Stylesheet" />
+    <script type="text/javascript" src="/minscripts/NinJa.js"></script>
+    <script type="text/javascript">
+        function colorAllRows() {
+            $Table("colorTable").Rows.ForEach(function (i) {
+                var c = $Row(i).Cells[0];
+                c.BackgroundColor(c.Text()).HorizontalAlignment("center").Text(c.Text().ToUpper());
+            });
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <h1>NinJa Array Examples</h1>
+    <h2>Iterating Arrays</h2>
+    <textarea rows="20" class="code"><script type="text/javascript" src="/scripts/NinJa.js"></script>
+<script type="text/javascript">
+    function colorAllRows() {
+        $Table("colorTable").Rows.ForEach(function (i) {
+            var c = $Row(i).Cells[0];
+            c.BackgroundColor(c.Text()).HorizontalAlignment("center").Text(c.Text().ToUpper());
+        });
+    }
+</script>
+<table id="Table1" width="100%">
+    <tr>
+        <td>purple</td>
+    </tr>
+    <tr>
+        <td>blue</td>
+    </tr>
+    <tr>
+        <td>green</td>
+    </tr>
+    <tr>
+        <td>yellow</td>
+    </tr>
+    <tr>
+        <td>orange</td>
+    </tr>
+    <tr>
+        <td>red</td>
+    </tr>
+</table></textarea>
+    <button type="button" onclick="colorAllRows()">Execute</button>
+    <table id="colorTable" width="100%">
+        <tr>
+            <td>purple</td>
+        </tr>
+        <tr>
+            <td>blue</td>
+        </tr>
+        <tr>
+            <td>green</td>
+        </tr>
+        <tr>
+            <td>yellow</td>
+        </tr>
+        <tr>
+            <td>orange</td>
+        </tr>
+        <tr>
+            <td>red</td>
+        </tr>
+    </table>
+    </form>
+</body>
+</html>

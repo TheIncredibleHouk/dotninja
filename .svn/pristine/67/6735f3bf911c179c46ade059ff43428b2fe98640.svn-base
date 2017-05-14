@@ -1,0 +1,24 @@
+﻿body
+{
+}
+a
+{
+    text-decoration: none;
+}
+
+.optional
+{
+    font-style: italic;
+}
+
+.parameter, .field, .event, .property, .function, .constructorfunction
+{
+    display: block;
+    padding: 16px;
+}
+
+.parameter b, .field b, .event b, .property b, .function b, .constructorfunction b
+{
+    position: relative;
+    left: -16px;
+}

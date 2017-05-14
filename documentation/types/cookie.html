@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>Cookie - Object Type</title>
+<link href='/styles/docs.css' type='text/css' rel='Stylesheet' />
+</head>
+<body>
+<h1>Cookie - Object Type</h1>
+<h2>Summary</h2>
+<p>Represents a cookie. In order to save the cookie, it must be added to Client.Cookies.</p>
+<h2>Constructor</h2>
+<span class='constructor'>new Cookie(<span class=''><a href='../types/String.html'>String</a> name</span>, <span class=''><a href='../types/String.html'>String</a> value</span>, <span class=''><a href='../types/DateTime/TimeSpan.html'>DateTime/TimeSpan</a> time</span>)</span>
+<p>Represents a cookie. In order to save the cookie, it must be added to Client.Cookies.</p>
+<table class='parameters'>
+<tr><th>Parameter</th><th>Type</th><th>Required</th><th>Default</th><th>Summary</th></tr>
+<tr><td>name</td><td><a href='../types/String.html'>String</a></td><td>yes</td><td>undefined</td><td>The name of the cookie.</td></tr>
+<tr><td>value</td><td><a href='../types/String.html'>String</a></td><td>yes</td><td>undefined</td><td>(Optional)The value of the cookie.</td></tr>
+<tr><td>time</td><td><a href='../types/DateTime/TimeSpan.html'>DateTime/TimeSpan</a></td><td>yes</td><td>undefined</td><td>(Optional)If a DateTime, this sets the expiration date of the cookie. If a TimeSpan, DateTime.Now() adds the TimeSpan for the expiration date.</td></tr>
+</table><h1>Property Methods</h1><span class='property'>Expires (<span class=''><a href='../types/DateTime/TimeSpan.html'>DateTime/TimeSpan</a> time</span>)</span>
+<br />
+<p>Gets or sets the expiration date of the cookie.<p/><h3>Parameters</h3>
+<span class='parameter'><b>time</b>
+<br /> Type: <a href='../types/DateTime/TimeSpan.html'>DateTime/TimeSpan</a>
+<br />
+Required
+<br />
+Default Value: undefined
+<br />(Optional)If a DateTime, this sets the expiration date of the cookie. If a TimeSpan, DateTime.Now() adds the TimeSpan for the expiration date.
+</span><br /> Type: <a href='../types/.html'></a><br />Gets or sets the expiration date of the cookie.</span><span class='property'>Name (<span class=''><a href='../types/String.html'>String</a> name</span>)</span>
+<br />
+<p>Gets or sets the name of the cookie.<p/><h3>Parameters</h3>
+<span class='parameter'><b>name</b>
+<br /> Type: <a href='../types/String.html'>String</a>
+<br />
+Required
+<br />
+Default Value: undefined
+<br />(Optional)The name of the cookie.
+</span><br /> Type: <a href='../types/.html'></a><br />Gets or sets the name of the cookie.</span><span class='property'>Value (<span class=''><a href='../types/String.html'>String</a> value</span>)</span>
+<br />
+<p>Gets or sets the value of the cookie.<p/><h3>Parameters</h3>
+<span class='parameter'><b>value</b>
+<br /> Type: <a href='../types/String.html'>String</a>
+<br />
+Required
+<br />
+Default Value: undefined
+<br />The value of the cookie.
+</span><br /> Type: <a href='../types/.html'></a><br />Gets or sets the value of the cookie.</span>
